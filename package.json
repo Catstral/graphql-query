@@ -1,0 +1,42 @@
+{
+	"name": "@catstral/graphql-query",
+	"version": "1.1.0",
+	"description": "Re-useable and common JS/TS utility functions",
+	"license": "MIT",
+	"contributors": [
+		{
+			"email": "levyvandervalk@gmail.com",
+			"name": "Levy van der Valk"
+		},
+		{
+			"email": "levypondman@live.nl",
+			"name": "Levy Pondman"
+		}
+	],
+	"keywords": [
+		"javascript",
+		"typescript"
+	],
+	"type": "module",
+	"sideEffects": false,
+	"files": [
+		"dist"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Catstral/graphql-query.git"
+	},
+	"scripts": {
+		"build": "bun run ./scripts/build.ts && tsc --noEmit false --emitDeclarationOnly",
+		"tsc": "tsc --noEmit --diagnostics",
+		"lint": "biome check . --formatter-enabled=true",
+		"lint:apply": "biome check . --formatter-enabled=true --write",
+		"lint:apply:unsafe": "biome check . --formatter-enabled=true --write --unsafe",
+		"check": "bun tsc && bun lint"
+	},
+	"devDependencies": {
+		"@types/bun": "1.4.0",
+		"@biomejs/biome": "2.5.4",
+		"typescript": "^7.0.2"
+	}
+}
