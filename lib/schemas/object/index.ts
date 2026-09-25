@@ -20,16 +20,16 @@ export class GqlObjectSchema<
 	public readonly kind = "SCHEMA";
 	public readonly type = "object";
 	public readonly expects: `Object { ${string} }`; // NOTE: The sub type for this cannot be defined in types without messing with the generic
-	public readonly mask: S;
+	public readonly shape: S;
 	public readonly message?: Message;
 
-	public constructor(mask: S, message?: Message) {
+	public constructor(shape: S, message?: Message) {
 		super();
 
-		this.mask = mask;
+		this.shape = shape;
 		this.message = message;
 
-		const objectDescriptor = Object.entries(mask)
+		const objectDescriptor = Object.entries(shape)
 			.map(([key, schema]) => `${key}: ${schema.expects}`)
 			.join(", ");
 
@@ -44,7 +44,7 @@ export class GqlObjectSchema<
 			dataset.typed = true;
 			dataset.value = {};
 
-			for (const [key, schema] of Object.entries(this.mask)) {
+			for (const [key, schema] of Object.entries(this.shape)) {
 				if (key in input || schema.type === "optional" || schema.type === "nullish") {
 					// @ts-expect-error
 					const value = input[key];
@@ -128,16 +128,16 @@ export class GqlObjectSchema<
 	};
 }
 
-export function gqlObject<const S extends ObjectEntries>(mask: S): GqlObjectSchema<S, undefined>;
+export function gqlObject<const S extends ObjectEntries>(shape: S): GqlObjectSchema<S, undefined>;
 export function gqlObject<const S extends ObjectEntries, const Message extends ErrorMessage<GqlObjectIssue>>(
-	mask: S,
+	shape: S,
 	message: Message,
 ): GqlObjectSchema<S, Message>;
 export function gqlObject(
-	mask: ObjectEntries,
+	shape: ObjectEntries,
 	message?: ErrorMessage<GqlObjectIssue>,
 ): GqlObjectSchema<ObjectEntries, ErrorMessage<GqlObjectIssue>> {
-	return new GqlObjectSchema(mask, message);
+	return new GqlObjectSchema(shape, message);
 }
 
 export { gqlObject as object };
