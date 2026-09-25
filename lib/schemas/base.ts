@@ -5,6 +5,8 @@ import type { GqlIssueDetails, GqlIssueKind, IssuePathItem } from "~/types/issue
 import type { GqlSchemaKind } from "~/types/schema";
 
 export abstract class GqlIssue<const Input = unknown> implements Config<GqlIssue<Input>> {
+	#path?: [IssuePathItem, ...IssuePathItem[]];
+
 	public abstract readonly kind: GqlIssueKind;
 	public abstract readonly expected: string | null;
 
@@ -12,7 +14,6 @@ export abstract class GqlIssue<const Input = unknown> implements Config<GqlIssue
 	public readonly received: string;
 	public readonly message: string;
 	public readonly requirement?: unknown;
-	public readonly path?: [IssuePathItem, ...IssuePathItem[]];
 	public readonly issues?: [GqlIssue<Input>, ...GqlIssue<Input>[]];
 	public readonly abortEarly: boolean;
 	public readonly abortPipeEarly: boolean;
@@ -31,10 +32,22 @@ export abstract class GqlIssue<const Input = unknown> implements Config<GqlIssue
 		this.received = received;
 		this.message = message;
 		this.requirement = requirement;
-		this.path = path;
+		this.#path = path;
 		this.issues = issues;
 		this.abortEarly = abortEarly ?? false;
 		this.abortPipeEarly = abortPipeEarly ?? false;
+	}
+
+	public _prependPathItem(item: IssuePathItem) {
+		if (this.#path) {
+			this.#path.unshift(item);
+		} else {
+			this.#path = [item];
+		}
+	}
+
+	public get path() {
+		return this.#path;
 	}
 }
 
