@@ -6,6 +6,7 @@ export * from "./null";
 export * from "./nullable";
 export * from "./nullish";
 export * from "./number";
+export * from "./object";
 export * from "./optional";
 export * from "./string";
 export * from "./undefined";
